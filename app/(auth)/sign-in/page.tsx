@@ -6,6 +6,7 @@ import React from 'react'
 
 const page = () => (
     <AuthForm
+        // @ts-ignore
         type="SIGN_IN"
         schema={signInSchema}
         defaultValues={{

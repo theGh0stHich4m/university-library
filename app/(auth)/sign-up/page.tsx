@@ -7,6 +7,7 @@ import React from 'react'
 
 const page = () => (
     <AuthForm
+        // @ts-ignore
         type="SIGN_UP"
         schema={signUpSchema}
         defaultValues={{
