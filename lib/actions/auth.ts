@@ -5,33 +5,44 @@ import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
-
+import { headers } from "next/headers";
+import ratelimit from "../ratelimit";
+import { redirect } from "next/navigation";
 
 export const signInWithCredentials = async (
-    params: Pick<AuthCredentials, "email" | "password">,
+  params: Pick<AuthCredentials, "email" | "password">
 ) => {
-    const { email, password } = params;
+  const { email, password } = params;
 
-    try {
-        const result = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        });
+  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+  const { success } = await ratelimit.limit(ip);
 
-        if(result?.error){
-            return {success: false, error: result.error}
-        }
-        return {success: true};
-        
-    } catch (error) {
-        console.log(error, "SignIn Error")
-    return { success: false, error: "SignIn Error: " + error};
+  if (!success) return redirect("/too-fast");
+
+  try {
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      return { success: false, error: result.error };
     }
+    return { success: true };
+  } catch (error) {
+    console.log(error, "SignIn Error");
+    return { success: false, error: "SignIn Error: " + error };
+  }
 };
 
 export const signUp = async (params: AuthCredentials) => {
   const { fullName, email, password, universityId, universityCard } = params;
+
+  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+  const { success } = await ratelimit.limit(ip);
+
+  if (!success) return redirect("/too-fast");
 
   //check if the user is already existing
   const existingUser = await db
@@ -48,18 +59,17 @@ export const signUp = async (params: AuthCredentials) => {
 
   try {
     await db.insert(users).values({
-        fullName,
-        email,
-        universityId,
-        universityCard,
-        password: hashedPassword,
+      fullName,
+      email,
+      universityId,
+      universityCard,
+      password: hashedPassword,
     });
 
-    await signInWithCredentials({email, password});
+    await signInWithCredentials({ email, password });
     return { success: true };
-
   } catch (error) {
-    console.log(error, "SignUp Error")
+    console.log(error, "SignUp Error");
     return { success: false, error: "SignUp Error" };
   }
 };
