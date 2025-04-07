@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { bookSchema } from "@/lib/validation";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/FileUpload";
 
 interface Props extends Partial<Book> {
   type?: "create" | "update";
@@ -65,7 +66,7 @@ const BookForm = ({ type, ...Book }: Props) => {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"author"}
           render={({ field }) => (
@@ -86,7 +87,7 @@ const BookForm = ({ type, ...Book }: Props) => {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"genre"}
           render={({ field }) => (
@@ -107,8 +108,7 @@ const BookForm = ({ type, ...Book }: Props) => {
           )}
         />
 
-
-<FormField
+        <FormField
           control={form.control}
           name={"rating"}
           render={({ field }) => (
@@ -131,7 +131,7 @@ const BookForm = ({ type, ...Book }: Props) => {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"totalCopies"}
           render={({ field }) => (
@@ -162,14 +162,22 @@ const BookForm = ({ type, ...Book }: Props) => {
                 Book Image
               </FormLabel>
               <FormControl>
-                {/* file upload components */}
+                <FileUpload
+                  type="image"
+                  accept="image/*"
+                  placeholder={"Upload a Book cover"}
+                  folder={"books/covers"}
+                  variant="light"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"coverColor"}
           render={({ field }) => (
@@ -177,15 +185,13 @@ const BookForm = ({ type, ...Book }: Props) => {
               <FormLabel className="text-base font-normal text-dark-500">
                 Primary Color
               </FormLabel>
-              <FormControl>
-                {/* Color Picker */}
-              </FormControl>
+              <FormControl>{/* Color Picker */}</FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"description"}
           render={({ field }) => (
@@ -194,10 +200,11 @@ const BookForm = ({ type, ...Book }: Props) => {
                 Book Description
               </FormLabel>
               <FormControl>
-                <Textarea 
-                    placeholder="Book Description" {...field}
-                    rows={10}
-                    className="book-form_input"
+                <Textarea
+                  placeholder="Book Description"
+                  {...field}
+                  rows={10}
+                  className="book-form_input"
                 />
               </FormControl>
               <FormMessage />
@@ -205,7 +212,7 @@ const BookForm = ({ type, ...Book }: Props) => {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"videoUrl"}
           render={({ field }) => (
@@ -214,14 +221,22 @@ const BookForm = ({ type, ...Book }: Props) => {
                 Book Trailer
               </FormLabel>
               <FormControl>
-                {/* file upload components */}
+              <FileUpload
+                  type="video"
+                  accept="video/*"
+                  placeholder={"Upload a Book trailler"}
+                  folder={"books/videos"}
+                  variant="light"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name={"summary"}
           render={({ field }) => (
@@ -230,10 +245,11 @@ const BookForm = ({ type, ...Book }: Props) => {
                 Book Summary
               </FormLabel>
               <FormControl>
-                <Textarea 
-                    placeholder="Book Summary" {...field}
-                    rows={5}
-                    className="book-form_input"
+                <Textarea
+                  placeholder="Book Summary"
+                  {...field}
+                  rows={5}
+                  className="book-form_input"
                 />
               </FormControl>
               <FormMessage />
@@ -242,7 +258,7 @@ const BookForm = ({ type, ...Book }: Props) => {
         />
 
         <Button type="submit" className="book-form_btn text-white">
-            Add Book To Library
+          Add Book To Library
         </Button>
       </form>
     </Form>
