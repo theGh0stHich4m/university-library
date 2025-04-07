@@ -12,7 +12,10 @@ const page = () => {
                     + Create a new Book
                 </Link>
             </Button>
-        </div>  
+        </div>
+        <div className='mt-7 w-full overflow-hidden'>
+            <p>Table</p>
+        </div>
     </section>
   )
 }
