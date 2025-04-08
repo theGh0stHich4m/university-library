@@ -17,6 +17,7 @@ import { bookSchema } from "@/lib/validation";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
+import ColorPicker from "../ColorPicker";
 
 interface Props extends Partial<Book> {
   type?: "create" | "update";
@@ -185,7 +186,9 @@ const BookForm = ({ type, ...Book }: Props) => {
               <FormLabel className="text-base font-normal text-dark-500">
                 Primary Color
               </FormLabel>
-              <FormControl>{/* Color Picker */}</FormControl>
+              <FormControl>
+                <ColorPicker onPickerChange={field.onChange} value={field.value} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
