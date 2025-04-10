@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
 
+const isLoanedBook = false;
 const BookCard = ({
   id,
   title,
   genre,
   coverColor,
   coverUrl,
-  isLoanedBook = false,
 }: Book) => (
   <li className={cn(isLoanedBook && "xs:w-52 w-full")}>
     <Link
